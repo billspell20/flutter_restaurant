@@ -3,15 +3,22 @@ import 'package:restaurant_flutter/models/task.dart';
 import 'package:provider/provider.dart';
 import 'package:restaurant_flutter/models/task_data.dart';
 
-class AddTaskScreen extends StatelessWidget {
+class AddTaskScreen extends StatefulWidget {
+  @override
+  _AddTaskScreenState createState() => _AddTaskScreenState();
+}
+
+class _AddTaskScreenState extends State<AddTaskScreen> {
+  String radioButtonItem = 'Normal';
+  int id = 2;
+
   @override
   Widget build(BuildContext context) {
     String newTaskTitle = "";
-
     return Container(
       color: const Color(0xff757575),
       child: Container(
-        padding: EdgeInsets.all(20.0),
+        padding: const EdgeInsets.all(20.0),
         decoration: const BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.only(
@@ -23,12 +30,64 @@ class AddTaskScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             const Text(
-              'Add Task',
+              'Add Restaurant',
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 30.0,
-                color: Colors.lightBlueAccent,
+                color: Color(0xFF282c34),
               ),
+            ),
+            const Padding(
+                padding: EdgeInsets.only(top: 14.0, left: 14.0, right: 14.0),
+                child: Text('Priority:', style: TextStyle(fontSize: 16))),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Radio(
+                  value: 1,
+                  groupValue: id,
+                  onChanged: (value) {
+                    setState(() {
+                      radioButtonItem = 'Low';
+                      id = 1;
+                    });
+                  },
+                ),
+                const Text(
+                  'Low',
+                  style: TextStyle(fontSize: 17.0),
+                ),
+                Radio(
+                  value: 2,
+                  groupValue: id,
+                  onChanged: (value) {
+                    setState(() {
+                      radioButtonItem = 'Normal';
+                      id = 2;
+                    });
+                  },
+                ),
+                const Text(
+                  'Normal',
+                  style: TextStyle(
+                    fontSize: 17.0,
+                  ),
+                ),
+                Radio(
+                  value: 3,
+                  groupValue: id,
+                  onChanged: (value) {
+                    setState(() {
+                      radioButtonItem = 'High';
+                      id = 3;
+                    });
+                  },
+                ),
+                const Text(
+                  'High',
+                  style: TextStyle(fontSize: 17.0),
+                ),
+              ],
             ),
             TextField(
               autofocus: true,
@@ -37,16 +96,15 @@ class AddTaskScreen extends StatelessWidget {
                 newTaskTitle = newText;
               },
             ),
-            FlatButton(
+            TextButton(
+              style: flatButtonStyle,
               child: const Text(
                 'Add',
-                style: TextStyle(
-                  color: Colors.white,
-                ),
+                style: TextStyle(color: Colors.white),
               ),
-              color: Colors.lightBlueAccent,
               onPressed: () {
-                Provider.of<TaskData>(context).addTask(newTaskTitle);
+                Provider.of<TaskData>(context, listen: false)
+                    .addTask(newTaskTitle, radioButtonItem);
                 Navigator.pop(context);
               },
             ),
@@ -56,3 +114,13 @@ class AddTaskScreen extends StatelessWidget {
     );
   }
 }
+
+final ButtonStyle flatButtonStyle = TextButton.styleFrom(
+  primary: Colors.white,
+  minimumSize: const Size(88, 44),
+  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+  shape: const RoundedRectangleBorder(
+    borderRadius: BorderRadius.all(Radius.circular(2.0)),
+  ),
+  backgroundColor: const Color(0xFF282c34),
+);

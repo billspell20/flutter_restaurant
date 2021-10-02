@@ -8,10 +8,10 @@ class TasksScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.lightBlueAccent,
+      backgroundColor: const Color(0xFF282c34),
       floatingActionButton: FloatingActionButton(
-          backgroundColor: Colors.lightBlueAccent,
-          child: Icon(Icons.add),
+          backgroundColor: const Color(0xFF282c34),
+          child: const Icon(Icons.add),
           onPressed: () {
             showModalBottomSheet(
                 context: context,
@@ -27,16 +27,16 @@ class TasksScreen extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Container(
-            padding: EdgeInsets.only(
+            padding: const EdgeInsets.only(
                 top: 60.0, left: 30.0, right: 30.0, bottom: 30.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 const CircleAvatar(
                   child: Icon(
-                    Icons.list,
+                    Icons.fastfood_rounded,
                     size: 30.0,
-                    color: Colors.lightBlueAccent,
+                    color: Color(0xFF282c34),
                   ),
                   backgroundColor: Colors.white,
                   radius: 30.0,
@@ -45,15 +45,15 @@ class TasksScreen extends StatelessWidget {
                   height: 10.0,
                 ),
                 const Text(
-                  'Restaurant To-do List',
+                  'Restaurant Passport',
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: 50.0,
+                    fontSize: 30.0,
                     fontWeight: FontWeight.w700,
                   ),
                 ),
                 Text(
-                  '${Provider.of<TaskData>(context).taskCount} Tasks',
+                  '${Provider.of<TaskData>(context).taskCount} restaurants to visit.',
                   style: const TextStyle(
                     color: Colors.white,
                     fontSize: 18,
