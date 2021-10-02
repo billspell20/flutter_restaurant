@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "589088212389",
+    "project_id": "todo-authentication-react",
+    "storage_bucket": "todo-authentication-react.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:589088212389:android:33420df3ab9b946e7ed44c",
+        "android_client_info": {
+          "package_name": "williamspell.restaurant_flutter"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "589088212389-fbij7uhj3rgammdfiohustbon3nh4qeb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCiyy5aDSQzZh_me5r4bz5pm_x3MBAv-Sg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "589088212389-fbij7uhj3rgammdfiohustbon3nh4qeb.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "589088212389-tjbcb9dh2um16v95om8q272kr5oqtedr.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "williamspell.restaurantFlutter"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
