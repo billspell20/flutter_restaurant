@@ -34,6 +34,7 @@ class TaskTile extends StatelessWidget {
       ),
       trailing: IconButton(
         icon: const Icon(Icons.delete_forever),
+        color: Colors.redAccent,
         onPressed: deleteButtonCallback,
       ),
     );
