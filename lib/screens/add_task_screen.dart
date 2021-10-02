@@ -11,10 +11,10 @@ class AddTaskScreen extends StatefulWidget {
 class _AddTaskScreenState extends State<AddTaskScreen> {
   String radioButtonItem = 'Normal';
   int id = 2;
+  String newTaskTitle = "";
 
   @override
   Widget build(BuildContext context) {
-    String newTaskTitle = "";
     return Container(
       color: const Color(0xff757575),
       child: Container(
