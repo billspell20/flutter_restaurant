@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:restaurant_flutter/models/task_data.dart';
 
 class TasksScreen extends StatelessWidget {
+  static const String id = 'tasks_screen';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
