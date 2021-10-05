@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'login_screen.dart';
 import 'registration_screen.dart';
@@ -50,15 +51,25 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                 Hero(
                   tag: 'logo',
                   child: Container(
-                    child: const Image(image: AssetImage('images/coffee.png')),
+                    child: const Image(
+                        image: AssetImage('lib/images/coffee0.png')),
                     height: 60.0,
                   ),
                 ),
-                TypewriterAnimatedTextKit(
-                  text: const ['Restaurant Passport'],
-                  textStyle: const TextStyle(
-                    fontSize: 20.0,
-                    fontWeight: FontWeight.w900,
+                const SizedBox(
+                  width: 20.0,
+                ),
+                SizedBox(
+                  width: 280.0,
+                  child: AnimatedTextKit(
+                    animatedTexts: [
+                      ColorizeAnimatedText(
+                        'Restaurant Passport',
+                        textStyle: colorizeTextStyle,
+                        colors: colorizeColors,
+                      ),
+                    ],
+                    isRepeatingAnimation: true,
                   ),
                 ),
               ],
@@ -69,7 +80,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
             TextButton(
               style: flatButtonStyle,
               child: const Text(
-                'Log In',
+                'Log In Using Email',
                 style: TextStyle(color: Colors.lightBlueAccent),
               ),
               onPressed: () {
@@ -79,11 +90,21 @@ class _WelcomeScreenState extends State<WelcomeScreen>
             TextButton(
               style: flatButtonStyle,
               child: const Text(
-                'Register',
+                'Register using Email',
                 style: TextStyle(color: Colors.blueAccent),
               ),
               onPressed: () {
                 Navigator.pushNamed(context, RegistrationScreen.id);
+              },
+            ),
+            TextButton(
+              style: flatButtonStyle,
+              child: const Text(
+                'Log In with Google',
+                style: TextStyle(color: Colors.teal),
+              ),
+              onPressed: () {
+                Navigator.pushNamed(context, LoginScreen.id);
               },
             ),
           ],
@@ -93,12 +114,23 @@ class _WelcomeScreenState extends State<WelcomeScreen>
   }
 }
 
-final ButtonStyle flatButtonStyle = TextButton.styleFrom(
+final ButtonStyle flatButtonStyle = OutlinedButton.styleFrom(
   primary: Colors.white,
   minimumSize: const Size(88, 44),
   padding: const EdgeInsets.symmetric(horizontal: 16.0),
+  side: const BorderSide(width: 2, color: Color(0xFF282c34)),
   shape: const RoundedRectangleBorder(
-    borderRadius: BorderRadius.all(Radius.circular(2.0)),
+    borderRadius: BorderRadius.all(Radius.circular(12.0)),
   ),
-  backgroundColor: const Color(0xFF282c34),
+  backgroundColor: Colors.white, //const Color(0xFF282c34),
+);
+const colorizeColors = [
+  Colors.blue,
+  Colors.green,
+  Colors.teal,
+  Colors.tealAccent,
+];
+TextStyle colorizeTextStyle = const TextStyle(
+  fontSize: 40.0,
+  fontWeight: FontWeight.w800,
 );

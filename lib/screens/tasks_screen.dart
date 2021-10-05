@@ -3,6 +3,10 @@ import 'package:restaurant_flutter/widgets/tasks_list.dart';
 import 'package:restaurant_flutter/screens/add_task_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:restaurant_flutter/models/task_data.dart';
+import 'package:restaurant_flutter/screens/welcome_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
+final FirebaseAuth auth = FirebaseAuth.instance;
 
 class TasksScreen extends StatelessWidget {
   static const String id = 'tasks_screen';
@@ -33,14 +37,40 @@ class TasksScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                const CircleAvatar(
-                  child: Icon(
-                    Icons.fastfood_rounded,
-                    size: 30.0,
-                    color: Color(0xFF282c34),
-                  ),
-                  backgroundColor: Colors.white,
-                  radius: 30.0,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    const CircleAvatar(
+                      child: Icon(
+                        Icons.fastfood_rounded,
+                        size: 30.0,
+                        color: Color(0xFF282c34),
+                      ),
+                      backgroundColor: Colors.white,
+                      radius: 30.0,
+                    ),
+                    const SizedBox(
+                      height: 50.0,
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        _signOut() async {
+                          await auth.signOut();
+                        }
+
+                        Navigator.of(context).pop();
+                      },
+                      child: const CircleAvatar(
+                        child: Icon(
+                          Icons.logout,
+                          size: 30.0,
+                          color: Color(0xFF282c34),
+                        ),
+                        backgroundColor: Colors.white,
+                        radius: 30.0,
+                      ),
+                    ),
+                  ],
                 ),
                 const SizedBox(
                   height: 10.0,

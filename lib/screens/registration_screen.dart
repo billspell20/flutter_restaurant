@@ -28,12 +28,32 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: const CircleAvatar(
+                      child: Icon(
+                        Icons.arrow_back_sharp,
+                        size: 30.0,
+                        color: Colors.white,
+                      ),
+                      backgroundColor: Color(0xFF282c34),
+                      radius: 30.0,
+                    ),
+                  ),
+                ],
+              ),
               Flexible(
                 child: Hero(
                   tag: 'logo',
                   child: Container(
                     height: 200.0,
-                    child: const Image(image: AssetImage('images/coffee.png')),
+                    child: const Image(
+                        image: AssetImage('lib/images/coffee0.png')),
                   ),
                 ),
               ),
@@ -96,12 +116,13 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   }
 }
 
-final ButtonStyle flatButtonStyle = TextButton.styleFrom(
+final ButtonStyle flatButtonStyle = OutlinedButton.styleFrom(
   primary: Colors.white,
   minimumSize: const Size(88, 44),
   padding: const EdgeInsets.symmetric(horizontal: 16.0),
+  side: const BorderSide(width: 2, color: Color(0xFF282c34)),
   shape: const RoundedRectangleBorder(
-    borderRadius: BorderRadius.all(Radius.circular(2.0)),
+    borderRadius: BorderRadius.all(Radius.circular(12.0)),
   ),
-  backgroundColor: const Color(0xFF282c34),
+  backgroundColor: Colors.white, //const Color(0xFF282c34),
 );
