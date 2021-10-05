@@ -97,12 +97,14 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                 Navigator.pushNamed(context, RegistrationScreen.id);
               },
             ),
-            TextButton(
-              style: flatButtonStyle,
-              child: const Text(
+            TextButton.icon(
+              icon: const Image(
+                  image: AssetImage('lib/images/google_logo.png'), width: 20),
+              label: const Text(
                 'Log In with Google',
                 style: TextStyle(color: Colors.teal),
               ),
+              style: flatButtonStyle,
               onPressed: () {
                 Navigator.pushNamed(context, LoginScreen.id);
               },
