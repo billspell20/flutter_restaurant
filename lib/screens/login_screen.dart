@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:restaurant_flutter/constants.dart';
+import 'package:restaurant_flutter/models/user.dart';
 import 'package:restaurant_flutter/screens/tasks_screen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -95,9 +96,9 @@ class _LoginScreenState extends State<LoginScreen> {
                     showSpinner = true;
                   });
                   try {
-                    final user = await _auth.signInWithEmailAndPassword(
+                    final AuthResult = await _auth.signInWithEmailAndPassword(
                         email: email, password: password);
-                    if (user != null) {
+                    if (AuthResult != null) {
                       Navigator.pushNamed(context, TasksScreen.id);
                     }
                     //TODO: Handle bad login

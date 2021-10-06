@@ -12,7 +12,8 @@ class TaskTile extends StatelessWidget {
       required this.taskTitle,
       required this.taskPriority,
       required this.checkboxCallback,
-      required this.deleteButtonCallback});
+      required this.deleteButtonCallback,
+      taskUser});
 
   @override
   Widget build(BuildContext context) {

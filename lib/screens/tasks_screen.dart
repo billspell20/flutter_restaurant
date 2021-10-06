@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:restaurant_flutter/models/user.dart';
 import 'package:restaurant_flutter/widgets/tasks_list.dart';
 import 'package:restaurant_flutter/screens/add_task_screen.dart';
 import 'package:provider/provider.dart';
@@ -6,7 +7,7 @@ import 'package:restaurant_flutter/models/task_data.dart';
 import 'package:restaurant_flutter/screens/welcome_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-final FirebaseAuth auth = FirebaseAuth.instance;
+final auth = FirebaseAuth.instance;
 
 class TasksScreen extends StatelessWidget {
   static const String id = 'tasks_screen';
