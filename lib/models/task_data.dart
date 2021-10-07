@@ -68,26 +68,32 @@ getRequestTasks() async {
   return jsonResponse;
 }
 
-Future<List<Task>> fetchAllTasks() async {
-  List<Task> tasks = [];
-  String idString = await getUserId();
-  print(idString);
-  var response = await http.get(Uri.https(
-      'https://www.restaurant-list.com', '/todos/list/' + idString + '/'));
-
-  Iterable list = jsonDecode(response.body);
-  tasks = list.map((model) => Task.fromJson(model)).toList();
-
-  print(tasks.length);
-  return tasks;
-}
-
 //check if get req empty, else return list
 class TaskData extends ChangeNotifier {
-  List _tasks = await _fetchAllTasks();
+  dynamic _tasks;
+  dynamic get myTasks => _tasks;
 
+  set myTasks(dynamic newTasks) {
+    _tasks = newTasks;
+    notifyListeners();
+  }
 
+  TaskData() {
+    fetchAllTasks();
+  }
 
+  Future<List<Task>> fetchAllTasks() async {
+    List<Task> myTasks = [];
+    String idString = getUserId();
+    print(idString);
+    var response = await http.get(Uri.https(
+        'https://www.restaurant-list.com', '/todos/list/' + idString + '/'));
+
+    Iterable list = jsonDecode(response.body);
+    myTasks = list.map((task) => Task.fromJson(task)).toList();
+
+    return myTasks;
+  }
 
 /*    Task(
       id: ObjectId().toString(),
@@ -100,12 +106,12 @@ class TaskData extends ChangeNotifier {
       priority: 'Low',
     )*/
 
-    /*List<Task> _tasks = json
+  /*List<Task> _tasks = json
       .decode(await getRequestTasks())
       .map((model) => Task.fromJson(model))
       .toList();*/
 
-    /*void generateTaskList() async {
+  /*void generateTaskList() async {
     //Check if user has existing items, if not generate examples
     print(_tasks);
     if (_tasks.isEmpty) {
@@ -138,39 +144,38 @@ class TaskData extends ChangeNotifier {
       ];*/
 
 //  List<Task> _tasks = [
-    //  Task(id: ObjectId().toString(), name: 'Example Task 1', priority: 'High'),
-    // Task(id: ObjectId().toString(), name: 'Example Task 2', priority: 'Low')
-    //];
+  //  Task(id: ObjectId().toString(), name: 'Example Task 1', priority: 'High'),
+  // Task(id: ObjectId().toString(), name: 'Example Task 2', priority: 'Low')
+  //];
 
-    UnmodifiableListView<Task> get tasks {
-      return UnmodifiableListView(_tasks);
-    }
+  UnmodifiableListView<Task> get tasks {
+    return UnmodifiableListView(_tasks);
+  }
 
-    int get taskCount {
-      return _tasks.length;
-    }
+  int get taskCount {
+    return _tasks.length;
+  }
 
-    void addTask(String newTaskTitle, String newTaskPriority) async {
-      final task = Task(
-        id: ObjectId().toString(),
-        name: newTaskTitle,
-        priority: newTaskPriority,
-      );
-      _tasks.add(task);
-      await sendRequestAdd(task);
-      notifyListeners();
-    }
+  void addTask(String newTaskTitle, String newTaskPriority) async {
+    final task = Task(
+      id: ObjectId().toString(),
+      name: newTaskTitle,
+      priority: newTaskPriority,
+    );
+    _tasks.add(task);
+    await sendRequestAdd(task);
+    notifyListeners();
+  }
 
-    void updateTask(Task task) async {
-      task.toggleDone();
-      await sendRequestUpdate(task);
-      notifyListeners();
-    }
+  void updateTask(Task task) async {
+    task.toggleDone();
+    await sendRequestUpdate(task);
+    notifyListeners();
+  }
 
-    void deleteTask(Task task) async {
-      _tasks.remove(task);
-      await sendRequestDelete(task.id);
-      notifyListeners();
-    }
+  void deleteTask(Task task) async {
+    _tasks.remove(task);
+    await sendRequestDelete(task.id);
+    notifyListeners();
   }
 }
