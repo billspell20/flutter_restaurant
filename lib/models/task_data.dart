@@ -3,7 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:restaurant_flutter/models/task.dart';
 import 'dart:collection';
 import 'package:objectid/objectid.dart';
-import 'package:restaurant_flutter/screens/login_screen.dart';
+import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 getUserId() async {
@@ -57,27 +57,62 @@ sendRequestDelete(todo) async {
 //'https://www.restaurant-list.com/todos/list/' + this.state.user_id + '/'
 getRequestTasks() async {
   String idString = await getUserId();
-  http
-      .get(Uri.https(
-          'https://www.restaurant-list.com', '/todos/list/' + idString + '/'))
-      .then((response) {
-    print("Response status: ${response.statusCode}");
-    print("Response body: ${response.body}");
-  });
+  print(idString);
+  final responseGet = await http.get(Uri.https(
+      'https://www.restaurant-list.com', '/todos/list/' + idString + '/'));
+
+  print("Response status: ${responseGet.statusCode}");
+  print("Response body: ${responseGet.body}");
+  final jsonResponse = responseGet.body;
+  print(jsonResponse);
+  return jsonResponse;
+}
+
+Future<List<Task>> fetchAllTasks() async {
+  List<Task> tasks = [];
+  String idString = await getUserId();
+  print(idString);
+  var response = await http.get(Uri.https(
+      'https://www.restaurant-list.com', '/todos/list/' + idString + '/'));
+
+  Iterable list = jsonDecode(response.body);
+  tasks = list.map((model) => Task.fromJson(model)).toList();
+
+  print(tasks.length);
+  return tasks;
 }
 
 //check if get req empty, else return list
 class TaskData extends ChangeNotifier {
-  List<Task> _tasks = [];
-  void generateTaskList() async {
-    var taskListGetOutput = await getRequestTasks();
-    print(taskListGetOutput);
+  List _tasks = await _fetchAllTasks();
+
+
+
+
+/*    Task(
+      id: ObjectId().toString(),
+      name: 'Example Task 13333333',
+      priority: 'High',
+    ),
+    Task(
+      id: ObjectId().toString(),
+      name: 'Example Task 2',
+      priority: 'Low',
+    )*/
+
+    /*List<Task> _tasks = json
+      .decode(await getRequestTasks())
+      .map((model) => Task.fromJson(model))
+      .toList();*/
+
+    /*void generateTaskList() async {
     //Check if user has existing items, if not generate examples
-    if (taskListGetOutput == null) {
+    print(_tasks);
+    if (_tasks.isEmpty) {
       _tasks = [
         Task(
           id: ObjectId().toString(),
-          name: 'Example Task 1',
+          name: 'Example Task 13333',
           priority: 'High',
         ),
         Task(
@@ -86,49 +121,56 @@ class TaskData extends ChangeNotifier {
           priority: 'Low',
         )
       ];
-      _tasks.add(_tasks[0]);
-      sendRequestAdd(_tasks[0]);
-      _tasks.add(_tasks[1]);
-      sendRequestAdd(_tasks[1]);
       notifyListeners();
     } else {
       print('hi');
-    }
-  }
+      _tasks = [
+        Task(
+          id: ObjectId().toString(),
+          name: 'Example Task 13333333',
+          priority: 'High',
+        ),
+        Task(
+          id: ObjectId().toString(),
+          name: 'Example Task 2',
+          priority: 'Low',
+        )
+      ];*/
 
 //  List<Task> _tasks = [
-  //  Task(id: ObjectId().toString(), name: 'Example Task 1', priority: 'High'),
-  // Task(id: ObjectId().toString(), name: 'Example Task 2', priority: 'Low')
-  //];
+    //  Task(id: ObjectId().toString(), name: 'Example Task 1', priority: 'High'),
+    // Task(id: ObjectId().toString(), name: 'Example Task 2', priority: 'Low')
+    //];
 
-  UnmodifiableListView<Task> get tasks {
-    return UnmodifiableListView(_tasks);
-  }
+    UnmodifiableListView<Task> get tasks {
+      return UnmodifiableListView(_tasks);
+    }
 
-  int get taskCount {
-    return _tasks.length;
-  }
+    int get taskCount {
+      return _tasks.length;
+    }
 
-  void addTask(String newTaskTitle, String newTaskPriority) async {
-    final task = Task(
-      id: ObjectId().toString(),
-      name: newTaskTitle,
-      priority: newTaskPriority,
-    );
-    _tasks.add(task);
-    await sendRequestAdd(task);
-    notifyListeners();
-  }
+    void addTask(String newTaskTitle, String newTaskPriority) async {
+      final task = Task(
+        id: ObjectId().toString(),
+        name: newTaskTitle,
+        priority: newTaskPriority,
+      );
+      _tasks.add(task);
+      await sendRequestAdd(task);
+      notifyListeners();
+    }
 
-  void updateTask(Task task) async {
-    task.toggleDone();
-    await sendRequestUpdate(task);
-    notifyListeners();
-  }
+    void updateTask(Task task) async {
+      task.toggleDone();
+      await sendRequestUpdate(task);
+      notifyListeners();
+    }
 
-  void deleteTask(Task task) async {
-    _tasks.remove(task);
-    await sendRequestDelete(task.id);
-    notifyListeners();
+    void deleteTask(Task task) async {
+      _tasks.remove(task);
+      await sendRequestDelete(task.id);
+      notifyListeners();
+    }
   }
 }

@@ -9,6 +9,12 @@ class Task {
       required this.priority,
       this.isDone = false});
 
+  Task.fromJson(Map<String, dynamic> json)
+      : id = json['_id'],
+        name = json['todo_description'],
+        priority = json['todo_priority'],
+        isDone = json['todo_completed'];
+
   void toggleDone() {
     isDone = !isDone;
   }
