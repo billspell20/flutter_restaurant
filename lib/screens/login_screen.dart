@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/services.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:restaurant_flutter/constants.dart';
 import 'package:restaurant_flutter/models/user.dart';
@@ -101,11 +102,27 @@ class _LoginScreenState extends State<LoginScreen> {
                     if (AuthResult != null) {
                       Navigator.pushNamed(context, TasksScreen.id);
                     }
-                    //TODO: Handle bad login
 
                     setState(() {
                       showSpinner = false;
                     });
+                  } on PlatformException catch (err) {
+                    var message =
+                        'An error occurred, please check your credentials!';
+
+                    if (err.message != null) {
+                      message = err.message!;
+                      setState(() {
+                        var errorMessage = message;
+                      });
+                      print(message);
+                    }
+                    Scaffold.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(message),
+                        backgroundColor: Theme.of(context).errorColor,
+                      ),
+                    );
                   } catch (e) {
                     print(e);
                   }
