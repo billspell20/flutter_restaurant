@@ -6,8 +6,10 @@ import 'package:provider/provider.dart';
 import 'package:restaurant_flutter/models/task_data.dart';
 import 'package:restaurant_flutter/screens/welcome_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 final auth = FirebaseAuth.instance;
+final GoogleSignIn _googleSignIn = GoogleSignIn();
 
 class TasksScreen extends StatelessWidget {
   static const String id = 'tasks_screen';
@@ -57,6 +59,7 @@ class TasksScreen extends StatelessWidget {
                       onTap: () {
                         _signOut() async {
                           await auth.signOut();
+                          await _googleSignIn.signOut();
                         }
 
                         Navigator.of(context).pop();

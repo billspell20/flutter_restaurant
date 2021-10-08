@@ -54,45 +54,38 @@ sendRequestDelete(todo) async {
   });
 }
 
-//'https://www.restaurant-list.com/todos/list/' + this.state.user_id + '/'
-getRequestTasks() async {
+getRequestList() async {
   String idString = await getUserId();
   print(idString);
-  final responseGet = await http.get(Uri.https(
-      'https://www.restaurant-list.com', '/todos/list/' + idString + '/'));
-
-  print("Response status: ${responseGet.statusCode}");
-  print("Response body: ${responseGet.body}");
-  final jsonResponse = responseGet.body;
-  print(jsonResponse);
-  return jsonResponse;
+  String urlAdd = '/todos/list/' + idString + '/';
+  var response =
+      await http.get(Uri.parse('https://www.restaurant-list.com' + urlAdd));
+  late List<Task> tsks = [];
+  var data = jsonDecode(response.body);
+  for (var x in data) {
+    var list = Task(
+        id: x['_id'],
+        name: x['todo_description'],
+        priority: x['todo_priority'],
+        isDone: x['todo_completed']);
+    tsks.add(list);
+  }
+  return tsks;
 }
 
 //check if get req empty, else return list
 class TaskData extends ChangeNotifier {
-  dynamic _tasks;
-  dynamic get myTasks => _tasks;
+  late List<Task> _tasks = [];
 
-  set myTasks(dynamic newTasks) {
-    _tasks = newTasks;
+  get myTasks => _tasks;
+
+  void search() async {
+    try {
+      _tasks.add(getRequestList());
+    } catch (e) {
+      print(e);
+    }
     notifyListeners();
-  }
-
-  TaskData() {
-    fetchAllTasks();
-  }
-
-  Future<List<Task>> fetchAllTasks() async {
-    List<Task> myTasks = [];
-    String idString = getUserId();
-    print(idString);
-    var response = await http.get(Uri.https(
-        'https://www.restaurant-list.com', '/todos/list/' + idString + '/'));
-
-    Iterable list = jsonDecode(response.body);
-    myTasks = list.map((task) => Task.fromJson(task)).toList();
-
-    return myTasks;
   }
 
 /*    Task(

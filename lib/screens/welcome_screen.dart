@@ -3,6 +3,15 @@ import 'package:flutter/material.dart';
 import 'login_screen.dart';
 import 'registration_screen.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'tasks_screen.dart';
+
+final FirebaseAuth _auth = FirebaseAuth.instance;
+final GoogleSignIn _googleSignIn = GoogleSignIn();
+
+GlobalKey<FormState> _userLoginFormKey = GlobalKey();
+FirebaseUser _user = '' as FirebaseUser;
 
 class WelcomeScreen extends StatefulWidget {
   static const String id = 'welcome_screen';
@@ -105,8 +114,12 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                 style: TextStyle(color: Colors.teal),
               ),
               style: flatButtonStyle,
-              onPressed: () {
-                Navigator.pushNamed(context, LoginScreen.id);
+              onPressed: () async {
+                signInWithGoogle().then(
+                  (FirebaseUser user) {
+                    Navigator.pushNamed(context, TasksScreen.id);
+                  },
+                );
               },
             ),
           ],
@@ -136,3 +149,22 @@ TextStyle colorizeTextStyle = const TextStyle(
   fontSize: 40.0,
   fontWeight: FontWeight.w800,
 );
+Future<FirebaseUser> signInWithGoogle() async {
+  GoogleSignInAccount googleSignInAccount = await _googleSignIn.signIn();
+  GoogleSignInAuthentication googleSignInAuthentication =
+      await googleSignInAccount.authentication;
+  AuthCredential credential = GoogleAuthProvider.getCredential(
+    accessToken: googleSignInAuthentication.accessToken,
+    idToken: googleSignInAuthentication.idToken,
+  );
+  AuthResult authResult = await _auth.signInWithCredential(credential);
+  _user = authResult.user;
+  assert(!_user.isAnonymous);
+  assert(await _user.getIdToken() != null);
+  FirebaseUser currentUser = await _auth.currentUser();
+  assert(_user.uid == currentUser.uid);
+
+  print("User Name: ${_user.displayName}");
+  print("User Email ${_user.email}");
+  return currentUser;
+}
