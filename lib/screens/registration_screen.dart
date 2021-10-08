@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:restaurant_flutter/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:restaurant_flutter/models/user.dart';
@@ -105,6 +106,23 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     setState(() {
                       showSpinner = false;
                     });
+                  } on PlatformException catch (err) {
+                    var message =
+                        'An error occurred, please check your credentials!';
+
+                    if (err.message != null) {
+                      message = err.message!;
+                      setState(() {
+                        var errorMessage = message;
+                      });
+                      print(message);
+                    }
+                    Scaffold.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(message),
+                        backgroundColor: Theme.of(context).errorColor,
+                      ),
+                    );
                   } catch (e) {
                     print(e);
                   }
