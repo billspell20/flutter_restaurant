@@ -107,6 +107,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       showSpinner = false;
                     });
                   } on PlatformException catch (err) {
+                    setState(() {
+                      showSpinner = false;
+                    });
                     var message =
                         'An error occurred, please check your credentials!';
 
@@ -123,6 +126,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         backgroundColor: Theme.of(context).errorColor,
                       ),
                     );
+                    setState(() {
+                      showSpinner = false;
+                    });
                   } catch (e) {
                     print(e);
                   }

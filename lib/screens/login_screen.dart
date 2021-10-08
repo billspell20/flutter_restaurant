@@ -107,6 +107,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       showSpinner = false;
                     });
                   } on PlatformException catch (err) {
+                    setState(() {
+                      showSpinner = false;
+                    });
                     var message =
                         'An error occurred, please check your credentials!';
 
@@ -123,6 +126,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         backgroundColor: Theme.of(context).errorColor,
                       ),
                     );
+
                   } catch (e) {
                     print(e);
                   }
