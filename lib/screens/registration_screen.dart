@@ -97,14 +97,16 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     showSpinner = true;
                   });
                   try {
-                    final AuthResult =
-                        await _auth.createUserWithEmailAndPassword(
-                            email: email, password: password);
-                    if (AuthResult != null) {
-                      Navigator.pushNamed(context, TasksScreen.id);
-                    }
-                    setState(() {
-                      showSpinner = false;
+                    _auth
+                        .createUserWithEmailAndPassword(
+                            email: email, password: password)
+                        .then((AuthResult) {
+                      if (AuthResult != null) {
+                        Navigator.pushNamed(context, TasksScreen.id);
+                      }
+                      setState(() {
+                        showSpinner = false;
+                      });
                     });
                   } on PlatformException catch (err) {
                     setState(() {
@@ -120,7 +122,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       });
                       print(message);
                     }
-                    Scaffold.of(context).showSnackBar(
+                    ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         content: Text(message),
                         backgroundColor: Theme.of(context).errorColor,

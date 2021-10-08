@@ -97,14 +97,17 @@ class _LoginScreenState extends State<LoginScreen> {
                     showSpinner = true;
                   });
                   try {
-                    final AuthResult = await _auth.signInWithEmailAndPassword(
-                        email: email, password: password);
-                    if (AuthResult != null) {
-                      Navigator.pushNamed(context, TasksScreen.id);
-                    }
+                    _auth
+                        .signInWithEmailAndPassword(
+                            email: email, password: password)
+                        .then((AuthResult) {
+                      if (AuthResult != null) {
+                        Navigator.pushNamed(context, TasksScreen.id);
+                      }
 
-                    setState(() {
-                      showSpinner = false;
+                      setState(() {
+                        showSpinner = false;
+                      });
                     });
                   } on PlatformException catch (err) {
                     setState(() {
@@ -120,13 +123,12 @@ class _LoginScreenState extends State<LoginScreen> {
                       });
                       print(message);
                     }
-                    Scaffold.of(context).showSnackBar(
+                    ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         content: Text(message),
                         backgroundColor: Theme.of(context).errorColor,
                       ),
                     );
-
                   } catch (e) {
                     print(e);
                   }
