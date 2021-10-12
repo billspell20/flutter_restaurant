@@ -3,8 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:restaurant_flutter/constants.dart';
-import 'package:restaurant_flutter/models/user.dart';
 import 'package:restaurant_flutter/screens/tasks_screen.dart';
+import 'package:restaurant_flutter/widgets/message_snack.dart';
 
 class LoginScreen extends StatefulWidget {
   static const String id = 'login_screen';
@@ -17,10 +17,34 @@ class _LoginScreenState extends State<LoginScreen> {
   final _auth = FirebaseAuth.instance;
   late String email;
   late String password;
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  void submitLogin(BuildContext context) async {
+    try {
+      setState(() {
+        showSpinner = true;
+      });
+      await _auth.signInWithEmailAndPassword(email: email, password: password);
+      setState(() {
+        showSpinner = false;
+      });
+      Navigator.pushNamed(context, TasksScreen.id);
+    } catch (e) {
+      MessageSnack().showErrorMessage(
+          true,
+          _scaffoldKey,
+          () => {
+                setState(() {
+                  showSpinner = false;
+                })
+              });
+    } finally {}
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       backgroundColor: Colors.white,
       body: ModalProgressHUD(
         inAsyncCall: showSpinner,
@@ -92,47 +116,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   'Log In',
                   style: TextStyle(color: Colors.lightBlueAccent),
                 ),
-                onPressed: () async {
-                  setState(() {
-                    showSpinner = true;
-                  });
-                  try {
-                    _auth
-                        .signInWithEmailAndPassword(
-                            email: email, password: password)
-                        .then((AuthResult) {
-                      if (AuthResult != null) {
-                        Navigator.pushNamed(context, TasksScreen.id);
-                      }
-
-                      setState(() {
-                        showSpinner = false;
-                      });
-                    });
-                  } on PlatformException catch (err) {
-                    setState(() {
-                      showSpinner = false;
-                    });
-                    var message =
-                        'An error occurred, please check your credentials!';
-
-                    if (err.message != null) {
-                      message = err.message!;
-                      setState(() {
-                        var errorMessage = message;
-                      });
-                      print(message);
-                    }
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(message),
-                        backgroundColor: Theme.of(context).errorColor,
-                      ),
-                    );
-                  } catch (e) {
-                    print(e);
-                  }
-                },
+                onPressed: () => submitLogin(context),
               ),
             ],
           ),
