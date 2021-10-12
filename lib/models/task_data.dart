@@ -75,9 +75,18 @@ getRequestList() async {
 
 //check if get req empty, else return list
 class TaskData extends ChangeNotifier {
-  late List<Task> _tasks = [];
+  late List<Task> tasks1 = [];
+  List<Task> get _tasks => tasks1;
+  void callReq() async {
+    tasks1 = await getRequestList();
+    notifyListeners();
+  }
 
-  get myTasks => _tasks;
+  TaskData() {
+    callReq();
+  }
+
+  /*get myTasks => _tasks;
 
   void search() async {
     try {
@@ -88,7 +97,7 @@ class TaskData extends ChangeNotifier {
     notifyListeners();
   }
 
-/*    Task(
+   Task(
       id: ObjectId().toString(),
       name: 'Example Task 13333333',
       priority: 'High',
