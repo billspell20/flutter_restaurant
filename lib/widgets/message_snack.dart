@@ -20,7 +20,7 @@ class MessageSnack {
           "Error logging in - incorrect email or password. Please double check your credentials.";
     } else {
       errorString =
-          "Error registering user. Please make sure email is correctly formatted (ie. 'user@user.com') and/or password is at least 6 characters.";
+          "Error registering user. Please make sure email is correctly formatted (ie. 'user@email.com') and/or password is at least 6 characters.";
     }
 
     SnackBar snackBar = SnackBar(
