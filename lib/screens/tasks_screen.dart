@@ -59,7 +59,9 @@ class TasksScreen extends StatelessWidget {
                       onTap: () {
                         _signOut() async {
                           await auth.signOut();
+                          print('auth signout');
                           await _googleSignIn.signOut();
+                          print('google signout');
                         }
 
                         Navigator.of(context).pop();
