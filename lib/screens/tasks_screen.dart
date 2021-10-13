@@ -58,13 +58,16 @@ class TasksScreen extends StatelessWidget {
                     GestureDetector(
                       onTap: () {
                         _signOut() async {
-                          await auth.signOut();
-                          print('auth signout');
-                          await _googleSignIn.signOut();
-                          print('google signout');
+                          if (await _googleSignIn.isSignedIn()) {
+                            await _googleSignIn.signOut();
+                            print('google signout');
+                            Navigator.of(context).pop();
+                          } else {
+                            await auth.signOut();
+                            print('auth signout');
+                            Navigator.of(context).pop();
+                          }
                         }
-
-                        Navigator.of(context).pop();
                       },
                       child: const CircleAvatar(
                         child: Icon(
