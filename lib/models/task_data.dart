@@ -76,10 +76,13 @@ getRequestList() async {
 //check if get req empty, else return list
 class TaskData extends ChangeNotifier {
   List<Task> tasks1 = [];
+  String useruid1 = "";
   List<Task> get _tasks => tasks1;
+  String get useruid => useruid1;
 
   void callReq() async {
     tasks1 = await getRequestList();
+    useruid1 = await getUserId();
     notifyListeners();
   }
 
@@ -158,6 +161,10 @@ class TaskData extends ChangeNotifier {
 
   int get taskCount {
     return _tasks.length;
+  }
+
+  String get getUserUid {
+    return useruid;
   }
 
   void addTask(String newTaskTitle, String newTaskPriority) async {

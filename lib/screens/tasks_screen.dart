@@ -10,6 +10,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 
 final auth = FirebaseAuth.instance;
 final GoogleSignIn _googleSignIn = GoogleSignIn();
+Future<void> _handleSignOut() => _googleSignIn.disconnect();
 
 class TasksScreen extends StatelessWidget {
   static const String id = 'tasks_screen';
@@ -56,18 +57,12 @@ class TasksScreen extends StatelessWidget {
                       height: 50.0,
                     ),
                     GestureDetector(
-                      onTap: () {
-                        _signOut() async {
-                          if (await _googleSignIn.isSignedIn()) {
-                            await _googleSignIn.signOut();
-                            print('google signout');
-                            Navigator.of(context).pop();
-                          } else {
-                            await auth.signOut();
-                            print('auth signout');
-                            Navigator.of(context).pop();
-                          }
-                        }
+                      onTap: () async {
+                        await auth.signOut();
+                        await _googleSignIn.disconnect();
+                        Navigator.pop(context);
+                        Navigator.pushNamedAndRemoveUntil(context,
+                            "welcome_screen", (Route<dynamic> route) => false);
                       },
                       child: const CircleAvatar(
                         child: Icon(

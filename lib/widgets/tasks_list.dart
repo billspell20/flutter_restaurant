@@ -13,26 +13,30 @@ class TasksList extends StatefulWidget {
 class _TasksListState extends State<TasksList> {
   @override
   Widget build(BuildContext context) {
-    return Consumer<TaskData>(
-      builder: (context, taskData, child) {
-        return ListView.builder(
-          itemBuilder: (context, index) {
-            var task = taskData.tasks[index];
-            return TaskTile(
-              taskTitle: task.name,
-              taskPriority: task.priority,
-              isChecked: task.isDone,
-              checkboxCallback: (checkboxState) {
-                taskData.updateTask(task);
+    body:
+    return ChangeNotifierProvider(
+        create: (context) => TaskData(),
+        child: Consumer<TaskData>(
+          key: ObjectKey(Provider.of<TaskData>(context).getUserUid),
+          builder: (context, taskData, child) {
+            return ListView.builder(
+              itemBuilder: (context, index) {
+                var task = taskData.tasks[index];
+                return TaskTile(
+                  taskTitle: task.name,
+                  taskPriority: task.priority,
+                  isChecked: task.isDone,
+                  checkboxCallback: (checkboxState) {
+                    taskData.updateTask(task);
+                  },
+                  deleteButtonCallback: () {
+                    taskData.deleteTask(task);
+                  },
+                );
               },
-              deleteButtonCallback: () {
-                taskData.deleteTask(task);
-              },
+              itemCount: taskData.taskCount,
             );
           },
-          itemCount: taskData.taskCount,
-        );
-      },
-    );
+        ));
   }
 }

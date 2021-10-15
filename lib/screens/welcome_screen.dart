@@ -10,7 +10,6 @@ import 'tasks_screen.dart';
 final FirebaseAuth _auth = FirebaseAuth.instance;
 final GoogleSignIn _googleSignIn = GoogleSignIn();
 
-GlobalKey<FormState> _userLoginFormKey = GlobalKey();
 FirebaseUser _user = '' as FirebaseUser;
 
 class WelcomeScreen extends StatefulWidget {
@@ -150,9 +149,9 @@ TextStyle colorizeTextStyle = const TextStyle(
   fontWeight: FontWeight.w800,
 );
 Future<FirebaseUser> signInWithGoogle() async {
-  GoogleSignInAccount googleSignInAccount = await _googleSignIn.signIn();
+  GoogleSignInAccount? googleSignInAccount = await _googleSignIn.signIn();
   GoogleSignInAuthentication googleSignInAuthentication =
-      await googleSignInAccount.authentication;
+      await googleSignInAccount!.authentication;
   AuthCredential credential = GoogleAuthProvider.getCredential(
     accessToken: googleSignInAuthentication.accessToken,
     idToken: googleSignInAuthentication.idToken,
