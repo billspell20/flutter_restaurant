@@ -145,7 +145,7 @@ const colorizeColors = [
   Colors.tealAccent,
 ];
 TextStyle colorizeTextStyle = const TextStyle(
-  fontSize: 40.0,
+  fontSize: 30.0,
   fontWeight: FontWeight.w800,
 );
 Future<FirebaseUser> signInWithGoogle() async {
