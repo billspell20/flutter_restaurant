@@ -58,8 +58,14 @@ class TasksScreen extends StatelessWidget {
                     ),
                     GestureDetector(
                       onTap: () async {
-                        await auth.signOut();
-                        await _googleSignIn.disconnect();
+                        if (await _googleSignIn.isSignedIn()){
+                        await _googleSignIn.disconnect().whenComplete(() async {
+                          await auth.signOut();
+                        });}
+                        else {
+                          await auth.signOut();
+                        }
+
                         Navigator.pop(context);
                         Navigator.pushNamedAndRemoveUntil(context,
                             "welcome_screen", (Route<dynamic> route) => false);

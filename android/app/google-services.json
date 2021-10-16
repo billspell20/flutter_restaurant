@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "589088212389-9kqrl9bbbj28g2v0luae27e4fjb5gkp9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "williamspell.restaurant_flutter",
+            "certificate_hash": "9ad197a6464eeb30b2b9c46a67de007cbd5b4c88"
+          }
+        },
+        {
           "client_id": "589088212389-fbij7uhj3rgammdfiohustbon3nh4qeb.apps.googleusercontent.com",
           "client_type": 3
         }

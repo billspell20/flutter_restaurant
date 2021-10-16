@@ -68,7 +68,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                   width: 20.0,
                 ),
                 SizedBox(
-                  width: 280.0,
+                  width: 230.0,
                   child: AnimatedTextKit(
                     animatedTexts: [
                       ColorizeAnimatedText(
