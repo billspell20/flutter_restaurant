@@ -17,7 +17,6 @@ class _TasksListState extends State<TasksList> {
     return ChangeNotifierProvider(
         create: (context) => TaskData(),
         child: Consumer<TaskData>(
-          key: ObjectKey(Provider.of<TaskData>(context).getUserUid),
           builder: (context, taskData, child) {
             return ListView.builder(
               itemBuilder: (context, index) {

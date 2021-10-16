@@ -175,6 +175,7 @@ class TaskData extends ChangeNotifier {
     );
     _tasks.add(task);
     await sendRequestAdd(task);
+    tasks1 = await getRequestList();
     notifyListeners();
   }
 
