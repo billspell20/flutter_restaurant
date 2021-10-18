@@ -64,7 +64,6 @@ getRequestList() async {
   if (idString.isEmpty) {
     return emptyListVar;
   }
-  print(idString);
   String urlAdd = '/todos/list/' + idString + '/';
   var response =
       await http.get(Uri.parse('https://www.restaurant-list.com' + urlAdd));
@@ -81,7 +80,6 @@ getRequestList() async {
   return tsks;
 }
 
-//check if get req empty, else return list
 class TaskData extends ChangeNotifier {
   List<Task> _tasks = [];
 

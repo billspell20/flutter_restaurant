@@ -1,9 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:restaurant_flutter/models/task.dart';
 import 'package:provider/provider.dart';
 import 'package:restaurant_flutter/models/task_data.dart';
-import 'package:restaurant_flutter/models/user.dart';
 
 class AddTaskScreen extends StatefulWidget {
   @override

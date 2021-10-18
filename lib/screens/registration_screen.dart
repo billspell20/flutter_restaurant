@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:provider/provider.dart';
 import 'package:restaurant_flutter/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:restaurant_flutter/models/task_data.dart';
-import 'package:restaurant_flutter/models/user.dart';
 import 'package:restaurant_flutter/screens/tasks_screen.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:restaurant_flutter/widgets/message_snack.dart';

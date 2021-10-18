@@ -5,7 +5,6 @@ import 'package:restaurant_flutter/screens/login_screen.dart';
 import 'package:restaurant_flutter/screens/registration_screen.dart';
 import 'package:restaurant_flutter/screens/welcome_screen.dart';
 import 'package:restaurant_flutter/models/task_data.dart';
-import 'models/user.dart';
 
 void main() => runApp(MyApp());
 
@@ -25,4 +24,3 @@ class MyApp extends StatelessWidget {
         ));
   }
 }
-

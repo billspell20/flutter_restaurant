@@ -165,8 +165,5 @@ Future<FirebaseUser> signInWithGoogle() async {
   assert(await _user.getIdToken() != null);
   FirebaseUser currentUser = await _auth.currentUser();
   assert(_user.uid == currentUser.uid);
-
-  print("User Name: ${_user.displayName}");
-  print("User Email ${_user.email}");
   return currentUser;
 }
