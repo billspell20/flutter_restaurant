@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:restaurant_flutter/models/task_data.dart';
 import 'login_screen.dart';
 import 'registration_screen.dart';
@@ -117,6 +118,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
               onPressed: () async {
                 signInWithGoogle().then(
                   (FirebaseUser user) {
+                    Provider.of<TaskData>(context, listen: false).callReq();
                     Navigator.pushNamed(context, TasksScreen.id);
                   },
                 );

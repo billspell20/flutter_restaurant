@@ -67,7 +67,8 @@ class TasksScreen extends StatelessWidget {
                         } else {
                           await auth.signOut();
                         }
-
+                        Provider.of<TaskData>(context, listen: false)
+                            .clearTasks();
                         Navigator.pop(context);
                         Navigator.pushNamedAndRemoveUntil(context,
                             "welcome_screen", (Route<dynamic> route) => false);

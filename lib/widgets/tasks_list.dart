@@ -9,11 +9,27 @@ import 'package:async/async.dart';
 
 final _Key0 = GlobalKey<ScaffoldState>();
 
-class TasksList extends StatelessWidget {
+class TasksList extends StatefulWidget {
+  @override
+  _TasksListState createState() => _TasksListState();
+}
+
+class _TasksListState extends State<TasksList> {
+  late var resetArray;
   final AsyncMemoizer _memoizer = AsyncMemoizer();
 
-  Future<List> _someFuture() {
-    return TaskData().callReq();
+  @override
+  void initState() {
+    super.initState();
+    setState(() {
+      resetArray = TaskData().callReq();
+    });
+    _getNewArray();
+  }
+
+  _getNewArray() {
+    resetArray = TaskData().callReq();
+    return resetArray;
   }
 
   @override
@@ -23,7 +39,7 @@ class TasksList extends StatelessWidget {
         create: (context) => TaskData(),*/
     return Consumer<TaskData>(builder: (context, taskData, child) {
       return FutureBuilder(
-          future: _someFuture(),
+          future: _getNewArray(),
           builder: (context, AsyncSnapshot snapshot) {
             if (snapshot.connectionState == ConnectionState.done) {
               if (!snapshot.hasData) {
