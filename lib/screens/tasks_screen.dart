@@ -8,7 +8,6 @@ import 'package:google_sign_in/google_sign_in.dart';
 
 final auth = FirebaseAuth.instance;
 final GoogleSignIn _googleSignIn = GoogleSignIn();
-Future<void> _handleSignOut() => _googleSignIn.disconnect();
 
 class TasksScreen extends StatelessWidget {
   static const String id = 'tasks_screen';
