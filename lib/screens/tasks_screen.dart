@@ -58,11 +58,13 @@ class TasksScreen extends StatelessWidget {
                     ),
                     GestureDetector(
                       onTap: () async {
-                        if (await _googleSignIn.isSignedIn()){
-                        await _googleSignIn.disconnect().whenComplete(() async {
-                          await auth.signOut();
-                        });}
-                        else {
+                        if (await _googleSignIn.isSignedIn()) {
+                          await _googleSignIn
+                              .disconnect()
+                              .whenComplete(() async {
+                            await auth.signOut();
+                          });
+                        } else {
                           await auth.signOut();
                         }
 

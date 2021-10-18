@@ -8,7 +8,11 @@ import 'package:http/http.dart' as http;
 
 getUserId() async {
   FirebaseUser currentUser = await FirebaseAuth.instance.currentUser();
-  return currentUser.uid;
+  if (currentUser == null) {
+    return "";
+  } else {
+    return currentUser.uid;
+  }
 }
 
 sendRequestAdd(Task task) async {
@@ -56,6 +60,10 @@ sendRequestDelete(todo) async {
 
 getRequestList() async {
   String idString = await getUserId();
+  List<Task> emptyListVar = [];
+  if (idString.isEmpty) {
+    return emptyListVar;
+  }
   print(idString);
   String urlAdd = '/todos/list/' + idString + '/';
   var response =
@@ -76,14 +84,13 @@ getRequestList() async {
 //check if get req empty, else return list
 class TaskData extends ChangeNotifier {
   List<Task> tasks1 = [];
-  String useruid1 = "";
   List<Task> get _tasks => tasks1;
-  String get useruid => useruid1;
 
-  void callReq() async {
+  Future<List<Task>> callReq() async {
+    clearTasks();
     tasks1 = await getRequestList();
-    useruid1 = await getUserId();
     notifyListeners();
+    return tasks1;
   }
 
   TaskData() {
@@ -91,80 +98,12 @@ class TaskData extends ChangeNotifier {
     notifyListeners();
   }
 
-  /*get myTasks => _tasks;
-
-  void search() async {
-    try {
-      _tasks.add(getRequestList());
-    } catch (e) {
-      print(e);
-    }
-    notifyListeners();
-  }
-
-   Task(
-      id: ObjectId().toString(),
-      name: 'Example Task 13333333',
-      priority: 'High',
-    ),
-    Task(
-      id: ObjectId().toString(),
-      name: 'Example Task 2',
-      priority: 'Low',
-    )*/
-
-  /*List<Task> _tasks = json
-      .decode(await getRequestTasks())
-      .map((model) => Task.fromJson(model))
-      .toList();*/
-
-  /*void generateTaskList() async {
-    //Check if user has existing items, if not generate examples
-    print(_tasks);
-    if (_tasks.isEmpty) {
-      _tasks = [
-        Task(
-          id: ObjectId().toString(),
-          name: 'Example Task 13333',
-          priority: 'High',
-        ),
-        Task(
-          id: ObjectId().toString(),
-          name: 'Example Task 2',
-          priority: 'Low',
-        )
-      ];
-      notifyListeners();
-    } else {
-      print('hi');
-      _tasks = [
-        Task(
-          id: ObjectId().toString(),
-          name: 'Example Task 13333333',
-          priority: 'High',
-        ),
-        Task(
-          id: ObjectId().toString(),
-          name: 'Example Task 2',
-          priority: 'Low',
-        )
-      ];*/
-
-//  List<Task> _tasks = [
-  //  Task(id: ObjectId().toString(), name: 'Example Task 1', priority: 'High'),
-  // Task(id: ObjectId().toString(), name: 'Example Task 2', priority: 'Low')
-  //];
-
   UnmodifiableListView<Task> get tasks {
     return UnmodifiableListView(_tasks);
   }
 
   int get taskCount {
     return _tasks.length;
-  }
-
-  String get getUserUid {
-    return useruid;
   }
 
   void addTask(String newTaskTitle, String newTaskPriority) async {
@@ -175,7 +114,6 @@ class TaskData extends ChangeNotifier {
     );
     _tasks.add(task);
     await sendRequestAdd(task);
-    tasks1 = await getRequestList();
     notifyListeners();
   }
 
@@ -189,5 +127,20 @@ class TaskData extends ChangeNotifier {
     _tasks.remove(task);
     await sendRequestDelete(task.id);
     notifyListeners();
+  }
+
+  void clearTasks() {
+    _tasks.clear();
+    // This call tells the widgets that are listening to this model to rebuild.
+    notifyListeners();
+  }
+
+  getUserId() async {
+    FirebaseUser currentUser = await FirebaseAuth.instance.currentUser();
+    if (currentUser == null) {
+      return "";
+    } else {
+      return currentUser.uid;
+    }
   }
 }

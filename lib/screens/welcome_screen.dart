@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:restaurant_flutter/models/task_data.dart';
 import 'login_screen.dart';
 import 'registration_screen.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
@@ -68,7 +69,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                   width: 20.0,
                 ),
                 SizedBox(
-                  width: 230.0,
+                  width: 220.0,
                   child: AnimatedTextKit(
                     animatedTexts: [
                       ColorizeAnimatedText(
