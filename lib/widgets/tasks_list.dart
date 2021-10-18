@@ -9,25 +9,11 @@ import 'package:async/async.dart';
 
 final _Key0 = GlobalKey<ScaffoldState>();
 
-class TasksList extends StatefulWidget {
-  @override
-  _TasksListState createState() => _TasksListState();
-}
+class TasksList extends StatelessWidget {
+  final AsyncMemoizer _memoizer = AsyncMemoizer();
 
-class _TasksListState extends State<TasksList> {
-/*  final AsyncMemoizer _memoizer = AsyncMemoizer();
-
-  Future<void> _someFuture() {
-    return _memoizer.runOnce(() async {
-      await TaskData().callReq();
-    });
-  }*/
-  late final Future<List<Task>> future;
-  Future<List> setSelectedList() {
-    setState(() {
-      late var future = TaskData().callReq();
-    });
-    return future;
+  Future<List> _someFuture() {
+    return TaskData().callReq();
   }
 
   @override
@@ -37,7 +23,7 @@ class _TasksListState extends State<TasksList> {
         create: (context) => TaskData(),*/
     return Consumer<TaskData>(builder: (context, taskData, child) {
       return FutureBuilder(
-          future: setSelectedList(),
+          future: _someFuture(),
           builder: (context, AsyncSnapshot snapshot) {
             if (snapshot.connectionState == ConnectionState.done) {
               if (!snapshot.hasData) {
