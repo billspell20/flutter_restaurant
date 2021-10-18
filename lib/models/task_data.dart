@@ -83,14 +83,12 @@ getRequestList() async {
 
 //check if get req empty, else return list
 class TaskData extends ChangeNotifier {
-  List<Task> tasks1 = [];
-  List<Task> get _tasks => tasks1;
+  List<Task> _tasks = [];
 
   Future<List<Task>> callReq() async {
-    clearTasks();
-    tasks1 = await getRequestList();
+    _tasks = await getRequestList();
     notifyListeners();
-    return tasks1;
+    return _tasks;
   }
 
   TaskData() {
