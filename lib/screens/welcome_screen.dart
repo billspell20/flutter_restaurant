@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:restaurant_flutter/models/task_data.dart';
-import '../auth.dart';
+import '../auth.dart' as authApple;
 import 'login_screen.dart';
 import 'registration_screen.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
@@ -14,7 +14,7 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:restaurant_flutter/widgets/ad_helper.dart';
 import 'package:apple_sign_in/apple_sign_in.dart' as apple;
 
-AuthService authapple = AuthService();
+authApple.AuthService authapple0 = authApple.AuthService();
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
 final GoogleSignIn _googleSignIn = GoogleSignIn();
@@ -158,12 +158,12 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                   },
                 ),
                 FutureBuilder(
-                  future: authapple.appleSignInAvailable,
+                  future: authapple0.appleSignInAvailable,
                   builder: (context, snapshot) {
                     if (snapshot.data == true) {
                       return applebutton.AppleSignInButton(
                         onPressed: () async {
-                          var user = await authapple.appleSignIn();
+                          var user = await authapple0.appleSignIn();
                           if (user != null) {
                             Provider.of<TaskData>(context, listen: false)
                                 .callReq();
