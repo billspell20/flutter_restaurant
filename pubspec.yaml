@@ -37,17 +37,20 @@ dependencies:
 
   # Add the dependencies for any other Firebase products you want to use in your app
   # For example, to use Firebase Authentication and Cloud Firestore
-  firebase_auth: ^0.14.0+5
+  firebase_auth: ^0.15.3+1
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
-  http: ^0.13.3
+  http: ^0.11.3
   provider: ^6.0.1
   modal_progress_hud: ^0.1.3
   animated_text_kit: ^4.2.1
   google_sign_in: ^5.1.1
   objectid: ^2.0.0
+  google_mobile_ads: ^0.13.2
+  apple_sign_in: ^0.1.0
+  device_info: ^0.4.1+4
 
 dev_dependencies:
   flutter_test:

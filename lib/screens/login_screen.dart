@@ -7,6 +7,8 @@ import 'package:restaurant_flutter/constants.dart';
 import 'package:restaurant_flutter/models/task_data.dart';
 import 'package:restaurant_flutter/screens/tasks_screen.dart';
 import 'package:restaurant_flutter/widgets/message_snack.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:restaurant_flutter/widgets/ad_helper.dart';
 
 class LoginScreen extends StatefulWidget {
   static const String id = 'login_screen';
@@ -20,6 +22,31 @@ class _LoginScreenState extends State<LoginScreen> {
   late String email;
   late String password;
   final _scaffoldKey = GlobalKey<ScaffoldState>();
+  late BannerAd _bannerAd;
+  bool _isBannerAdReady = false;
+
+  @override
+  void initState() {
+    _bannerAd = BannerAd(
+      adUnitId: AdHelper.bannerAdUnitId,
+      request: AdRequest(),
+      size: AdSize.fullBanner,
+      listener: BannerAdListener(
+        onAdLoaded: (_) {
+          setState(() {
+            _isBannerAdReady = true;
+          });
+        },
+        onAdFailedToLoad: (ad, err) {
+          print('Failed to load a banner ad: ${err.message}');
+          _isBannerAdReady = false;
+          ad.dispose();
+        },
+      ),
+    );
+
+    _bannerAd.load();
+  }
 
   void submitLogin(BuildContext context) async {
     try {
@@ -121,11 +148,26 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 onPressed: () => submitLogin(context),
               ),
+              if (_isBannerAdReady)
+                Align(
+                  alignment: Alignment.topCenter,
+                  child: Container(
+                    width: _bannerAd.size.width.toDouble(),
+                    height: _bannerAd.size.height.toDouble(),
+                    child: AdWidget(ad: _bannerAd),
+                  ),
+                ),
             ],
           ),
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _bannerAd.dispose();
+    super.dispose();
   }
 }
 

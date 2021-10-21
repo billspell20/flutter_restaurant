@@ -5,6 +5,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:restaurant_flutter/screens/tasks_screen.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:restaurant_flutter/widgets/message_snack.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:restaurant_flutter/widgets/ad_helper.dart';
 
 class RegistrationScreen extends StatefulWidget {
   static const String id = 'registration_screen';
@@ -18,6 +20,31 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   late String email;
   late String password;
   final _scaffoldKey = GlobalKey<ScaffoldState>();
+  late BannerAd _bannerAd;
+  bool _isBannerAdReady = false;
+
+  @override
+  void initState() {
+    _bannerAd = BannerAd(
+      adUnitId: AdHelper.bannerAdUnitId,
+      request: AdRequest(),
+      size: AdSize.fullBanner,
+      listener: BannerAdListener(
+        onAdLoaded: (_) {
+          setState(() {
+            _isBannerAdReady = true;
+          });
+        },
+        onAdFailedToLoad: (ad, err) {
+          print('Failed to load a banner ad: ${err.message}');
+          _isBannerAdReady = false;
+          ad.dispose();
+        },
+      ),
+    );
+
+    _bannerAd.load();
+  }
 
   void submitReg(BuildContext context) async {
     try {
@@ -120,11 +147,26 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 ),
                 onPressed: () => submitReg(context),
               ),
+              if (_isBannerAdReady)
+                Align(
+                  alignment: Alignment.topCenter,
+                  child: Container(
+                    width: _bannerAd.size.width.toDouble(),
+                    height: _bannerAd.size.height.toDouble(),
+                    child: AdWidget(ad: _bannerAd),
+                  ),
+                ),
             ],
           ),
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _bannerAd.dispose();
+    super.dispose();
   }
 }
 

@@ -5,8 +5,13 @@ import 'package:restaurant_flutter/screens/login_screen.dart';
 import 'package:restaurant_flutter/screens/registration_screen.dart';
 import 'package:restaurant_flutter/screens/welcome_screen.dart';
 import 'package:restaurant_flutter/models/task_data.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 
-void main() => runApp(MyApp());
+void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  MobileAds.instance.initialize();
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   @override

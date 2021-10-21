@@ -1,13 +1,20 @@
+import 'package:apple_sign_in/apple_sign_in_button.dart' as applebutton;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:restaurant_flutter/models/task_data.dart';
+import '../auth.dart';
 import 'login_screen.dart';
 import 'registration_screen.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'tasks_screen.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:restaurant_flutter/widgets/ad_helper.dart';
+import 'package:apple_sign_in/apple_sign_in.dart' as apple;
+
+AuthService authapple = AuthService();
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
 final GoogleSignIn _googleSignIn = GoogleSignIn();
@@ -25,6 +32,8 @@ class _WelcomeScreenState extends State<WelcomeScreen>
     with SingleTickerProviderStateMixin {
   late AnimationController controller;
   late Animation animation;
+  late BannerAd _bannerAd;
+  bool _isBannerAdReady = false;
 
   @override
   void initState() {
@@ -38,11 +47,32 @@ class _WelcomeScreenState extends State<WelcomeScreen>
     controller.addListener(() {
       setState(() {});
     });
+
+    _bannerAd = BannerAd(
+      adUnitId: AdHelper.bannerAdUnitId,
+      request: AdRequest(),
+      size: AdSize.fullBanner,
+      listener: BannerAdListener(
+        onAdLoaded: (_) {
+          setState(() {
+            _isBannerAdReady = true;
+          });
+        },
+        onAdFailedToLoad: (ad, err) {
+          print('Failed to load a banner ad: ${err.message}');
+          _isBannerAdReady = false;
+          ad.dispose();
+        },
+      ),
+    );
+
+    _bannerAd.load();
   }
 
   @override
   void dispose() {
     controller.dispose();
+    _bannerAd.dispose();
     super.dispose();
   }
 
@@ -124,6 +154,33 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                 );
               },
             ),
+            FutureBuilder(
+              future: authapple.appleSignInAvailable,
+              builder: (context, snapshot) {
+                if (snapshot.data == true) {
+                  return applebutton.AppleSignInButton(
+                    onPressed: () async {
+                      FirebaseUser? user = await authapple.appleSignIn();
+                      if (user != null) {
+                        Provider.of<TaskData>(context, listen: false).callReq();
+                        Navigator.pushNamed(context, TasksScreen.id);
+                      }
+                    },
+                  );
+                } else {
+                  return Container();
+                }
+              },
+            ),
+            if (_isBannerAdReady)
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: Container(
+                  width: _bannerAd.size.width.toDouble(),
+                  height: _bannerAd.size.height.toDouble(),
+                  child: AdWidget(ad: _bannerAd),
+                ),
+              ),
           ],
         ),
       ),
@@ -167,3 +224,10 @@ Future<FirebaseUser> signInWithGoogle() async {
   assert(_user.uid == currentUser.uid);
   return currentUser;
 }
+
+/*final BannerAd myBanner = BannerAd(
+  adUnitId: AdHelper.bannerAdUnitId,
+  size: AdSize.fullBanner,
+  request: AdRequest(),
+  listener: BannerAdListener(),
+);*/

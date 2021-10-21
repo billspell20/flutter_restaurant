@@ -5,11 +5,45 @@ import 'package:provider/provider.dart';
 import 'package:restaurant_flutter/models/task_data.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:restaurant_flutter/widgets/ad_helper.dart';
 
 final auth = FirebaseAuth.instance;
 final GoogleSignIn _googleSignIn = GoogleSignIn();
 
-class TasksScreen extends StatelessWidget {
+class TasksScreen extends StatefulWidget {
+  static const String id = 'tasks_screen';
+
+  @override
+  _TasksScreenState createState() => _TasksScreenState();
+}
+
+class _TasksScreenState extends State<TasksScreen> {
+  late BannerAd _bannerAd;
+  bool _isBannerAdReady = false;
+  @override
+  void initState() {
+    _bannerAd = BannerAd(
+      adUnitId: AdHelper.bannerAdUnitId,
+      request: AdRequest(),
+      size: AdSize.fullBanner,
+      listener: BannerAdListener(
+        onAdLoaded: (_) {
+          setState(() {
+            _isBannerAdReady = true;
+          });
+        },
+        onAdFailedToLoad: (ad, err) {
+          print('Failed to load a banner ad: ${err.message}');
+          _isBannerAdReady = false;
+          ad.dispose();
+        },
+      ),
+    );
+
+    _bannerAd.load();
+  }
+
   static const String id = 'tasks_screen';
   @override
   Widget build(BuildContext context) {
@@ -116,8 +150,23 @@ class TasksScreen extends StatelessWidget {
               child: TasksList(),
             ),
           ),
+          if (_isBannerAdReady)
+            Align(
+              alignment: Alignment.topCenter,
+              child: Container(
+                width: _bannerAd.size.width.toDouble(),
+                height: _bannerAd.size.height.toDouble(),
+                child: AdWidget(ad: _bannerAd),
+              ),
+            ),
         ],
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _bannerAd.dispose();
+    super.dispose();
   }
 }
