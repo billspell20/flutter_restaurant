@@ -7,7 +7,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 getUserId() async {
-  FirebaseUser currentUser = await FirebaseAuth.instance.currentUser();
+  var currentUser = FirebaseAuth.instance.currentUser!;
   if (currentUser == null) {
     return "";
   } else {
@@ -132,7 +132,7 @@ class TaskData extends ChangeNotifier {
   }
 
   getUserId() async {
-    FirebaseUser currentUser = await FirebaseAuth.instance.currentUser();
+    var currentUser = FirebaseAuth.instance.currentUser!;
     if (currentUser == null) {
       return "";
     } else {

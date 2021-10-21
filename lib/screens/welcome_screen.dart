@@ -19,7 +19,7 @@ AuthService authapple = AuthService();
 final FirebaseAuth _auth = FirebaseAuth.instance;
 final GoogleSignIn _googleSignIn = GoogleSignIn();
 
-FirebaseUser _user = '' as FirebaseUser;
+var _user = '';
 
 class WelcomeScreen extends StatefulWidget {
   static const String id = 'welcome_screen';
@@ -147,7 +147,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
               style: flatButtonStyle,
               onPressed: () async {
                 signInWithGoogle().then(
-                  (FirebaseUser user) {
+                  (user) {
                     Provider.of<TaskData>(context, listen: false).callReq();
                     Navigator.pushNamed(context, TasksScreen.id);
                   },
@@ -160,7 +160,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                 if (snapshot.data == true) {
                   return applebutton.AppleSignInButton(
                     onPressed: () async {
-                      FirebaseUser? user = await authapple.appleSignIn();
+                      var user = await authapple.appleSignIn();
                       if (user != null) {
                         Provider.of<TaskData>(context, listen: false).callReq();
                         Navigator.pushNamed(context, TasksScreen.id);
@@ -208,20 +208,19 @@ TextStyle colorizeTextStyle = const TextStyle(
   fontSize: 30.0,
   fontWeight: FontWeight.w800,
 );
-Future<FirebaseUser> signInWithGoogle() async {
+Future signInWithGoogle() async {
   GoogleSignInAccount? googleSignInAccount = await _googleSignIn.signIn();
   GoogleSignInAuthentication googleSignInAuthentication =
       await googleSignInAccount!.authentication;
-  AuthCredential credential = GoogleAuthProvider.getCredential(
+  AuthCredential credential = GoogleAuthProvider.credential(
     accessToken: googleSignInAuthentication.accessToken,
     idToken: googleSignInAuthentication.idToken,
   );
-  AuthResult authResult = await _auth.signInWithCredential(credential);
-  _user = authResult.user;
-  assert(!_user.isAnonymous);
-  assert(await _user.getIdToken() != null);
-  FirebaseUser currentUser = await _auth.currentUser();
-  assert(_user.uid == currentUser.uid);
+  var authResult = (await _auth.signInWithCredential(credential));
+  _user = authResult.user as String;
+  assert(authResult.user != null);
+  var currentUser = _auth.currentUser;
+  assert(authResult.user!.uid == currentUser!.uid);
   return currentUser;
 }
 

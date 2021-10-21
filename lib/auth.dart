@@ -8,7 +8,7 @@ class AuthService {
   Future<bool> get appleSignInAvailable => AppleSignIn.isAvailable();
 
   /// Sign in with Apple
-  Future<FirebaseUser?> appleSignIn() async {
+  Future appleSignIn() async {
     try {
       final AuthorizationResult appleResult =
           await AppleSignIn.performRequests([
@@ -19,15 +19,14 @@ class AuthService {
         // handle errors from Apple here
       }
 
-      final AuthCredential credential =
-          OAuthProvider(providerId: 'apple.com').getCredential(
+      final AuthCredential credential = OAuthProvider('apple.com').credential(
         accessToken:
             String.fromCharCodes(appleResult.credential.authorizationCode),
         idToken: String.fromCharCodes(appleResult.credential.identityToken),
       );
 
-      AuthResult firebaseResult = await _auth.signInWithCredential(credential);
-      FirebaseUser user = firebaseResult.user;
+      var firebaseResult = await _auth.signInWithCredential(credential);
+      var user = firebaseResult.user;
 
       return user;
     } catch (error) {
