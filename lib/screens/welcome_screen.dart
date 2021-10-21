@@ -51,7 +51,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
     _bannerAd = BannerAd(
       adUnitId: AdHelper.bannerAdUnitId,
       request: AdRequest(),
-      size: AdSize.fullBanner,
+      size: AdSize.largeBanner,
       listener: BannerAdListener(
         onAdLoaded: (_) {
           setState(() {
@@ -80,109 +80,115 @@ class _WelcomeScreenState extends State<WelcomeScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: animation.value,
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 24.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            Row(
+      body: Stack(
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
-                Hero(
-                  tag: 'logo',
-                  child: Container(
-                    child: const Image(
-                        image: AssetImage('lib/images/coffee0.png')),
-                    height: 60.0,
-                  ),
+                Row(
+                  children: <Widget>[
+                    Hero(
+                      tag: 'logo',
+                      child: Container(
+                        child: const Image(
+                            image: AssetImage('lib/images/coffee0.png')),
+                        height: 60.0,
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 20.0,
+                    ),
+                    SizedBox(
+                      width: 220.0,
+                      child: AnimatedTextKit(
+                        animatedTexts: [
+                          ColorizeAnimatedText(
+                            'Restaurant Passport',
+                            textStyle: colorizeTextStyle,
+                            colors: colorizeColors,
+                          ),
+                        ],
+                        isRepeatingAnimation: true,
+                      ),
+                    ),
+                  ],
                 ),
                 const SizedBox(
-                  width: 20.0,
+                  height: 48.0,
                 ),
-                SizedBox(
-                  width: 220.0,
-                  child: AnimatedTextKit(
-                    animatedTexts: [
-                      ColorizeAnimatedText(
-                        'Restaurant Passport',
-                        textStyle: colorizeTextStyle,
-                        colors: colorizeColors,
-                      ),
-                    ],
-                    isRepeatingAnimation: true,
+                TextButton(
+                  style: flatButtonStyle,
+                  child: const Text(
+                    'Log In Using Email',
+                    style: TextStyle(color: Colors.lightBlueAccent),
                   ),
+                  onPressed: () {
+                    Navigator.pushNamed(context, LoginScreen.id);
+                  },
+                ),
+                TextButton(
+                  style: flatButtonStyle,
+                  child: const Text(
+                    'Register using Email',
+                    style: TextStyle(color: Colors.blueAccent),
+                  ),
+                  onPressed: () {
+                    Navigator.pushNamed(context, RegistrationScreen.id);
+                  },
+                ),
+                TextButton.icon(
+                  icon: const Image(
+                      image: AssetImage('lib/images/google_logo.png'),
+                      width: 20),
+                  label: const Text(
+                    'Log In with Google',
+                    style: TextStyle(color: Colors.teal),
+                  ),
+                  style: flatButtonStyle,
+                  onPressed: () async {
+                    signInWithGoogle().then(
+                      (user) {
+                        Provider.of<TaskData>(context, listen: false).callReq();
+                        Navigator.pushNamed(context, TasksScreen.id);
+                      },
+                    );
+                  },
+                ),
+                FutureBuilder(
+                  future: authapple.appleSignInAvailable,
+                  builder: (context, snapshot) {
+                    if (snapshot.data == true) {
+                      return applebutton.AppleSignInButton(
+                        onPressed: () async {
+                          var user = await authapple.appleSignIn();
+                          if (user != null) {
+                            Provider.of<TaskData>(context, listen: false)
+                                .callReq();
+                            Navigator.pushNamed(context, TasksScreen.id);
+                          }
+                        },
+                      );
+                    } else {
+                      return Container();
+                    }
+                  },
                 ),
               ],
             ),
-            const SizedBox(
-              height: 48.0,
-            ),
-            TextButton(
-              style: flatButtonStyle,
-              child: const Text(
-                'Log In Using Email',
-                style: TextStyle(color: Colors.lightBlueAccent),
+          ),
+          if (_isBannerAdReady)
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Container(
+                width: _bannerAd.size.width.toDouble(),
+                height: _bannerAd.size.height.toDouble() + 10,
+                child: AdWidget(ad: _bannerAd),
               ),
-              onPressed: () {
-                Navigator.pushNamed(context, LoginScreen.id);
-              },
             ),
-            TextButton(
-              style: flatButtonStyle,
-              child: const Text(
-                'Register using Email',
-                style: TextStyle(color: Colors.blueAccent),
-              ),
-              onPressed: () {
-                Navigator.pushNamed(context, RegistrationScreen.id);
-              },
-            ),
-            TextButton.icon(
-              icon: const Image(
-                  image: AssetImage('lib/images/google_logo.png'), width: 20),
-              label: const Text(
-                'Log In with Google',
-                style: TextStyle(color: Colors.teal),
-              ),
-              style: flatButtonStyle,
-              onPressed: () async {
-                signInWithGoogle().then(
-                  (user) {
-                    Provider.of<TaskData>(context, listen: false).callReq();
-                    Navigator.pushNamed(context, TasksScreen.id);
-                  },
-                );
-              },
-            ),
-            FutureBuilder(
-              future: authapple.appleSignInAvailable,
-              builder: (context, snapshot) {
-                if (snapshot.data == true) {
-                  return applebutton.AppleSignInButton(
-                    onPressed: () async {
-                      var user = await authapple.appleSignIn();
-                      if (user != null) {
-                        Provider.of<TaskData>(context, listen: false).callReq();
-                        Navigator.pushNamed(context, TasksScreen.id);
-                      }
-                    },
-                  );
-                } else {
-                  return Container();
-                }
-              },
-            ),
-            if (_isBannerAdReady)
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: Container(
-                  width: _bannerAd.size.width.toDouble(),
-                  height: _bannerAd.size.height.toDouble(),
-                  child: AdWidget(ad: _bannerAd),
-                ),
-              ),
-          ],
-        ),
+        ],
       ),
     );
   }

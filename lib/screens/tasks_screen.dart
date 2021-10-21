@@ -26,7 +26,7 @@ class _TasksScreenState extends State<TasksScreen> {
     _bannerAd = BannerAd(
       adUnitId: AdHelper.bannerAdUnitId,
       request: AdRequest(),
-      size: AdSize.fullBanner,
+      size: AdSize.largeBanner,
       listener: BannerAdListener(
         onAdLoaded: (_) {
           setState(() {
@@ -49,20 +49,22 @@ class _TasksScreenState extends State<TasksScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFF282c34),
-      floatingActionButton: FloatingActionButton(
-          backgroundColor: const Color(0xFF282c34),
-          child: const Icon(Icons.add),
-          onPressed: () {
-            showModalBottomSheet(
-                context: context,
-                isScrollControlled: true,
-                builder: (context) => SingleChildScrollView(
-                        child: Container(
-                      padding: EdgeInsets.only(
-                          bottom: MediaQuery.of(context).viewInsets.bottom),
-                      child: AddTaskScreen(),
-                    )));
-          }),
+      floatingActionButton: Padding(
+          padding: const EdgeInsets.only(bottom: 52.0),
+          child: FloatingActionButton(
+              backgroundColor: const Color(0xFF282c34),
+              child: const Icon(Icons.add),
+              onPressed: () {
+                showModalBottomSheet(
+                    context: context,
+                    isScrollControlled: true,
+                    builder: (context) => SingleChildScrollView(
+                            child: Container(
+                          padding: EdgeInsets.only(
+                              bottom: MediaQuery.of(context).viewInsets.bottom),
+                          child: AddTaskScreen(),
+                        )));
+              })),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[

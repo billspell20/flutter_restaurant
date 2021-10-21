@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:restaurant_flutter/screens/tasks_screen.dart';
 import 'package:provider/provider.dart';
@@ -7,9 +8,10 @@ import 'package:restaurant_flutter/screens/welcome_screen.dart';
 import 'package:restaurant_flutter/models/task_data.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   MobileAds.instance.initialize();
+  await Firebase.initializeApp();
   runApp(MyApp());
 }
 
