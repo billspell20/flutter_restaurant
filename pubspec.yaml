@@ -49,6 +49,7 @@ dependencies:
   google_sign_in: ^5.1.1
   objectid: ^2.0.0
   google_mobile_ads: ^0.13.2
+
   apple_sign_in: ^0.1.0
   device_info: ^0.4.1+4
 
