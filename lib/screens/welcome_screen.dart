@@ -19,7 +19,7 @@ authApple.AuthService authapple0 = authApple.AuthService();
 final FirebaseAuth _auth = FirebaseAuth.instance;
 final GoogleSignIn _googleSignIn = GoogleSignIn();
 
-var _user = '';
+User? _user;
 
 class WelcomeScreen extends StatefulWidget {
   static const String id = 'welcome_screen';
@@ -223,7 +223,7 @@ Future signInWithGoogle() async {
     idToken: googleSignInAuthentication.idToken,
   );
   var authResult = (await _auth.signInWithCredential(credential));
-  _user = authResult.user as String;
+  _user = authResult.user;
   assert(authResult.user != null);
   var currentUser = _auth.currentUser;
   assert(authResult.user!.uid == currentUser!.uid);
