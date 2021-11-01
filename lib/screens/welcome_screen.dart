@@ -1,4 +1,3 @@
-import 'package:apple_sign_in/apple_sign_in_button.dart' as applebutton;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -129,6 +128,9 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                     Navigator.pushNamed(context, LoginScreen.id);
                   },
                 ),
+                const SizedBox(
+                  height: 5.0,
+                ),
                 TextButton(
                   style: flatButtonStyle,
                   child: const Text(
@@ -138,6 +140,9 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                   onPressed: () {
                     Navigator.pushNamed(context, RegistrationScreen.id);
                   },
+                ),
+                const SizedBox(
+                  height: 20.0,
                 ),
                 TextButton.icon(
                   icon: const Image(
@@ -157,20 +162,25 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                     );
                   },
                 ),
+                const SizedBox(
+                  height: 5.0,
+                ),
                 FutureBuilder(
                   future: authapple0.appleSignInAvailable,
                   builder: (context, snapshot) {
                     if (snapshot.data == true) {
-                      return applebutton.AppleSignInButton(
-                        onPressed: () async {
-                          var user = await authapple0.appleSignIn();
-                          if (user != null) {
-                            Provider.of<TaskData>(context, listen: false)
-                                .callReq();
-                            Navigator.pushNamed(context, TasksScreen.id);
-                          }
-                        },
-                      );
+                      return apple.AppleSignInButton(
+                          onPressed: () async {
+                            var user = await authapple0.appleSignIn();
+                            if (user != null) {
+                              Provider.of<TaskData>(context, listen: false)
+                                  .callReq();
+                              Navigator.pushNamed(context, TasksScreen.id);
+                            }
+                          },
+                          type: apple.ButtonType.signIn,
+                          style: apple.ButtonStyle.black,
+                          cornerRadius: 12);
                     } else {
                       return Container();
                     }
@@ -196,7 +206,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
 
 final ButtonStyle flatButtonStyle = OutlinedButton.styleFrom(
   primary: Colors.white,
-  minimumSize: const Size(88, 44),
+  minimumSize: const Size(88, 50),
   padding: const EdgeInsets.symmetric(horizontal: 16.0),
   side: const BorderSide(width: 2, color: Color(0xFF282c34)),
   shape: const RoundedRectangleBorder(
